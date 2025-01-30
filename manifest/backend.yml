@@ -1,22 +1,122 @@
-name: My pet app 🐾
+name: Matrimony Website 💍
+
 entities:
-  Owner:
+  UserProfile 👤:
     properties:
       - name
-      - { name: birthdate, type: date }
-
-  Cat:
-    properties:
-      - name
+      - { name: gender, type: choice, options: { values: [Male, Female, Other] } }
       - { name: age, type: number }
-      - { name: birthdate, type: date }
-    belongsTo:
-      - Owner
+      - { name: maritalStatus, type: choice, options: { values: [Single, Divorced, Widowed] } }
+      - { name: religion, type: choice, options: { values: [Hindu, Muslim, Christian, Sikh, Other] } }
+      - { name: caste, type: string }
+      - { name: location, type: string }
+      - { name: profilePicture, type: image }
+      - { name: preferences, type: richText }
+      - { name: isVerified, type: boolean }
+      - { name: personalityTraits, type: text }  # Compatibility quiz results
+      - { name: interests, type: text }          # User's hobbies/interests
+      - { name: activities, type: text }          # User's activities for AI-powered matchmaking
 
-  Homepage:
-    nameSingular: Home content
-    single: true
+  MatchmakingQuiz 📊:
     properties:
-      - title
-      - { name: description, type: richText }
-      - { name: cover, type: image }
+      - { name: userProfileId, type: number }
+      - { name: answers, type: text }  # Store quiz answers as JSON or a serialized string
+      - { name: compatibilityScore, type: number }
+    belongsTo:
+      - UserProfile
+
+  AIRecommendations 📈:
+    properties:
+      - { name: userProfileId, type: number }
+      - { name: recommendedMatches, type: text }  # List of recommended user profiles based on AI
+      - { name: confidenceScore, type: number }   # AI's confidence in the match suggestions
+    belongsTo:
+      - UserProfile
+
+  MatchmakingResults 💑:
+    properties:
+      - { name: userProfileId, type: number }
+      - { name: matchUserId, type: number }
+      - { name: matchScore, type: number }  # Score from compatibility test and AI analysis
+      - { name: status, type: choice, options: { values: [Matched, Pending, Rejected] } }
+    belongsTo:
+      - UserProfile
+
+  IdentityVerification 🆔:
+    properties:
+      - { name: userProfileId, type: number }  # Updated to number (instead of integer)
+      - { name: idProofType, type: choice, options: { values: [Aadhaar, Passport, Driver's License, Other] } }
+      - { name: idProofImage, type: image }
+      - { name: verificationStatus, type: choice, options: { values: [Pending, Verified, Rejected] } }
+      - { name: verificationDate, type: timestamp }
+    belongsTo:
+      - UserProfile
+
+  PhotoVerification 📸:
+    properties:
+      - { name: userProfileId, type: number }  # Updated to number
+      - { name: selfieImage, type: image }
+      - { name: isPhotoMatched, type: boolean }
+      - { name: verificationStatus, type: choice, options: { values: [Pending, Verified, Rejected] } }
+      - { name: verificationDate, type: timestamp }
+    belongsTo:
+      - UserProfile
+
+  MobileVerification 📱:
+    properties:
+      - { name: userProfileId, type: number }  # Updated to number
+      - { name: phoneNumber, type: string }
+      - { name: otpCode, type: string }
+      - { name: otpStatus, type: choice, options: { values: [Sent, Verified, Expired, Failed] } }
+      - { name: verificationDate, type: timestamp }
+    belongsTo:
+      - UserProfile
+
+  EmailVerification 📧:
+    properties:
+      - { name: userProfileId, type: number }  # Updated to number
+      - { name: emailAddress, type: string }
+      - { name: otpCode, type: string }
+      - { name: otpStatus, type: choice, options: { values: [Sent, Verified, Expired, Failed] } }
+      - { name: verificationDate, type: timestamp }
+    belongsTo:
+      - UserProfile
+
+  Matchmaker 🧑‍💼:
+    properties:
+      - name
+      - { name: organization, type: string }
+      - { name: successRate, type: number }
+      - { name: isVerified, type: boolean }
+    belongsTo:
+      - UserProfile
+
+  Message 💬:
+    properties:
+      - { name: sender, type: string }
+      - { name: receiver, type: string }
+      - { name: content, type: text }
+      - { name: timestamp, type: timestamp }
+      - { name: status, type: choice, options: { values: [Sent, Delivered, Read] } }
+
+  Event 📅:
+    properties:
+      - { name: eventName, type: string }
+      - { name: eventDate, type: timestamp }
+      - { name: location, type: string }
+      - { name: description, type: text }
+      - { name: attendees, type: number }
+      - { name: eventType, type: choice, options: { values: [Conference, Meetup, Workshop, Webinar, Other] } }
+
+  Analytics 📊:
+    properties:
+      - { name: totalViews, type: number }
+      - { name: averageSessionTime, type: number }
+      - { name: bounceRate, type: number }
+      - { name: pageViews, type: number }
+      - { name: deviceType, type: choice, options: { values: [Mobile, Desktop, Tablet] } }
+      - { name: userRegion, type: string }
+
+  ReportAbuse:
+    properties:
+      - { name: description, type: string }
